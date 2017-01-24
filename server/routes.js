@@ -4,7 +4,9 @@ var request = require('request');
 var crypto = require('crypto');
 
 module.exports = function(app, express){
-
+  app.post('/tester', function(req, res) {
+    console.log(req.body);
+  })
   app.use('/', express.static('.'));
 
   app.get('/hive', function(req, res) {
