@@ -45,13 +45,13 @@ class Hive extends React.Component {
                     <Textinput onUpdate={this.updateState} statekey="instanceId">Instance Id</Textinput>
                     <input type="submit" value="Send"/>
                 </form>
-                <showResult result={this.state.result} />
+                <ShowResult result={this.state.result} />
 
             </div>
         );
     }
 }
-function showResult(props) {
+function ShowResult(props) {
   var signString = JSON.stringify(props.result.signString, null, 2);
   var options = JSON.stringify(props.result.options, null, 2);
   var response = JSON.stringify(props.result.response, null, 2);
