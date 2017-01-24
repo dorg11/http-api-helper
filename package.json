@@ -24,7 +24,7 @@
     "build" : "webpack",
     "clean" : "rimraf dist",
     "push:heroku" : "npm build && git push heroku master",
-    "push:github" : "npm clean && git push origin master"
+    "push:github" : "npm build && git push origin master"
   },
   "repository": {
     "type": "git",
