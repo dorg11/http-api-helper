@@ -31,7 +31,7 @@ class Hive extends React.Component {
     }
     render() {
         return (
-            <div>
+            <div className="container">
                 <form onSubmit={this.sendRequest}>
                     <RequestTypes onUpdate={this.updateState} value={this.state.requestType}/>
                     <CheckCustom onUpdate={this.updateState}/>
@@ -43,10 +43,9 @@ class Hive extends React.Component {
                     <Textinput onUpdate={this.updateState} statekey="appId">App Id</Textinput>
                     <Textinput onUpdate={this.updateState} statekey="secretKey">Secret Key</Textinput>
                     <Textinput onUpdate={this.updateState} statekey="instanceId">Instance Id</Textinput>
-                    <input type="submit" value="Send"/>
+                    <input className="form-control" type="submit" value="Send"/>
                 </form>
-                <ShowResult result={this.state.result} />
-
+              <ShowResult result={this.state.result} />
             </div>
         );
     }
@@ -74,13 +73,16 @@ function RelativeUrl(props) {
 }
 function CheckCustom(props) {
     return (
-        <label>Enter custom url:
-            <input type="checkbox" onChange={event => {
-                if (event.target.checked == false)
-                    props.onUpdate("relativeUrl", "/contacts");
-                props.onUpdate("customUrl", event.target.checked);
+      <div className="form-inline">
+        <div className="form-group">
+          <label>Enter custom url:    </label>
+          <input className="form-control" type="checkbox" onChange={event => {
+              if (event.target.checked == false)
+              props.onUpdate("relativeUrl", "/contacts");
+              props.onUpdate("customUrl", event.target.checked);
             }}/>
-        </label>
+        </div>
+      </div>
     )
 }
 class JsonTextarea extends React.Component {
@@ -99,10 +101,10 @@ class JsonTextarea extends React.Component {
     render() {
         if (this.props.show) {
             return (
-                <label>
-                    {this.props.children}:
-                    <textarea onBlur={event => this.updateParentState(event.target.value)}></textarea>
-                </label>
+              <div className="form-group">
+                <label>{this.props.children}:</label>
+                <textarea className="form-control" onBlur={event => this.updateParentState(event.target.value)}></textarea>
+              </div>
             )
         } else {
             return null
@@ -116,11 +118,13 @@ class QueryParams extends React.Component {
         this.state = {
             paramString: "?version=" + this.props.version
         }
-        this.props.onUpdate("queryString" , this.state.paramString);
         this.blurFunc = this.blurFunc.bind(this);
         this.updateState = this.updateState.bind(this);
         this.parseQuery = this.parseQuery.bind(this);
-        this.blurFunc();
+    }
+    componentWillMount() {
+      this.props.onUpdate("queryString" , this.state.paramString);
+      this.blurFunc();
     }
     blurFunc() {
         try {
@@ -150,10 +154,12 @@ class QueryParams extends React.Component {
 
 function Textinput(props) {
     return (
-        <label>
-            {props.children}:
-            <input value={props.value} type="text" onBlur={props.blurFunc} onChange={event => props.onUpdate(props.statekey, event.target.value)}/>
-        </label>
+
+      <div className="form-group">
+        <label>{props.children}:</label>
+        <input className="form-control" value={props.value} type="text" onBlur={props.blurFunc} onChange={event => props.onUpdate(props.statekey, event.target.value)}/>
+      </div>
+
     )
 }
 Hive.propTypes = {};
@@ -162,7 +168,7 @@ export default Hive;
 function Select(props) {
     const selectItems = props.items.map((value, index) => <option key={index}>{value}</option>);
     return (
-        <select onChange={data => props.onUpdate(props.statekey, data.target.value)}>{selectItems}</select>
+        <select className="form-control" onChange={data => props.onUpdate(props.statekey, data.target.value)}>{selectItems}</select>
     );
 }
 function UrlOptions(props) {
@@ -198,19 +204,19 @@ function UrlOptions(props) {
         "PUT": ['Only custom Urls']
     };
     return (
-        <label>
-            Url:
-            <Select statekey="relativeUrl" items={typeObject[props.type]} value={props.value} onUpdate={props.onUpdate}/>
-        </label>
+      <div className="form-group">
+        <label>Url:</label>
+        <Select statekey="relativeUrl" items={typeObject[props.type]} value={props.value} onUpdate={props.onUpdate}/>
+      </div>
     );
 
 }
 function RequestTypes(props) {
     const types = ['GET', 'POST', 'PUT'];
     return (
-        <label>
-            Request Type:
+        <div className="form-group">
+            <label>Request Type:</label>
             <Select statekey="requestType" onUpdate={props.onUpdate} value={props.value} items={types}></Select>
-        </label>
+        </div>
     );
 }

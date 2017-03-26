@@ -50,15 +50,19 @@ var hiveReq = function(body) {
         res = crypto.createHmac('sha256', body.secretKey);
         signature = res.update(signString).digest('base64').replace(/\+/g, '-').replace(/\//g, '_'); //different base64 standards
     }
-    this.run = function(b) {
+    this.run = function(responseObject) {
       createSignStr();
       sign();
       fillOptions();
       result.signString = signString;
       result.options = options;
-      request(options, function(error, response, body) {
-            result.response = JSON.parse(response.body);
-            b.send(result);
+      request(options, function(error, hiveResponse, body) {
+            try {
+              result.response = JSON.parse(hiveResponse.body)
+            } catch (err) {
+              result.response = JSON.parse(JSON.stringify(hiveResponse.body));
+            };
+            responseObject.send(result);
         });
     }
 }
