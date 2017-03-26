@@ -56,9 +56,9 @@ function ShowResult(props) {
   var response = JSON.stringify(props.result.response, null, 2);
   return (
     <div>
-      <div><pre>{signString}</pre></div>
-      <div><pre>{options}</pre></div>
-      <div><pre>{response}</pre></div>
+      <div><label>Sign string</label><pre>{signString}</pre></div>
+      <div><label>Request</label><pre>{options}</pre></div>
+      <div><label>Response</label><pre>{response}</pre></div>
     </div>
   )
 }
