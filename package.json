@@ -21,10 +21,11 @@
   "scripts": {
     "test": "node server",
     "start": "node server.js",
-    "build" : "webpack",
+    "build" : "webpack --optimize-minimize",
     "clean" : "rimraf dist",
     "push:heroku" : "npm build && git push heroku master",
-    "push:github" : "npm build && git push origin master"
+    "push:github" : "npm build && git push origin master",
+    "push" : "npm build && git push origin master && git push heroku master"
   },
   "repository": {
     "type": "git",
