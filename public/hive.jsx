@@ -1,4 +1,6 @@
 import React from 'react';
+import Switch from 'react-bootstrap-switch';
+
 
 class Hive extends React.Component {
     constructor(props) {
@@ -6,7 +8,7 @@ class Hive extends React.Component {
         this.state = {
             requestType: "GET",
             relativeUrl: "/contacts",
-            errorMessages: [],
+            inputCheck: {},
             result: {}
         }
         this.updateState = this.updateState.bind(this);
@@ -18,7 +20,6 @@ class Hive extends React.Component {
     sendRequest(event) {
         event.preventDefault();
         if (this.state.requestType == 'GET') this.state.rawBody = '';
-        console.log(this.state);
         fetch('/hivePost', {
             method: 'POST',
             headers: {
@@ -31,58 +32,70 @@ class Hive extends React.Component {
     }
     render() {
         return (
-            <div className="container">
-                <form onSubmit={this.sendRequest}>
-                    <RequestTypes onUpdate={this.updateState} value={this.state.requestType}/>
-                    <CheckCustom onUpdate={this.updateState}/>
-                    <RelativeUrl onUpdate={this.updateState} customUrl={this.state.customUrl} value={this.state.relativeUrl} requestType={this.state.requestType}/>
-                    <QueryParams onUpdate={this.updateState} version={this.state.requestType == 'POST' && this.state.relativeUrl == '/contacts'
-                        ? "2.0.0"
-                        : "1.0.0"}/>
-                    <JsonTextarea onUpdate={this.updateState} show={this.state.requestType != 'GET'}>Raw Body</JsonTextarea>
-                    <Textinput onUpdate={this.updateState} statekey="appId">App Id</Textinput>
-                    <Textinput onUpdate={this.updateState} statekey="secretKey">Secret Key</Textinput>
-                    <Textinput onUpdate={this.updateState} statekey="instanceId">Instance Id</Textinput>
-                    <input className="form-control" type="submit" value="Send"/>
-                </form>
-              <ShowResult result={this.state.result} />
+            <div className="container-fluid">
+              <form className="form-horizontal" onSubmit={this.sendRequest}>
+                  <RequestTypes onUpdate={this.updateState} value={this.state.requestType}/>
+                  <CheckCustom onUpdate={this.updateState}/>
+                  <RelativeUrl onUpdate={this.updateState} customUrl={this.state.customUrl} value={this.state.relativeUrl} requestType={this.state.requestType}/>
+                  <QueryParams onUpdate={this.updateState} version={this.state.requestType == 'POST' && this.state.relativeUrl == '/contacts'
+                      ? "2.0.0"
+                      : "1.0.0"}/>
+                  <JsonTextarea onUpdate={this.updateState} show={this.state.requestType != 'GET'}>Raw Body</JsonTextarea>
+                  <Textinput onUpdate={this.updateState} statekey="appId">App Id</Textinput>
+                  <Textinput onUpdate={this.updateState} statekey="secretKey">Secret Key</Textinput>
+                  <Textinput onUpdate={this.updateState} statekey="instanceId">Instance Id</Textinput>
+                  <SubmitButton />
+              </form>
+              {Object.keys(this.state.result).length ? <ShowResult result={this.state.result}/> : null }
             </div>
         );
     }
+}
+function SubmitButton(props) {
+  return (
+    <FormElement>
+      <input className="form-control" type="submit" value="Send"/>
+    </FormElement>
+  )
 }
 function ShowResult(props) {
   var signString = JSON.stringify(props.result.signString, null, 2);
   var options = JSON.stringify(props.result.options, null, 2);
   var response = JSON.stringify(props.result.response, null, 2);
   return (
-    <div>
+    <div className="col-xs-offset-2 col-xs-10">
       <div><label>Sign string</label><pre>{signString}</pre></div>
       <div><label>Request</label><pre>{options}</pre></div>
       <div><label>Response</label><pre>{response}</pre></div>
     </div>
   )
 }
+function FormElement(props) {
+  return (
+    <div className="form-group">
+        <label className="col-xs-2 control-label">{props.label}</label>
+        <div className="col-xs-10">
+          {props.children}
+        </div>
+    </div>
+  )
+}
 function RelativeUrl(props) {
     if (props.customUrl) {
         return (
-            <Textinput statekey="relativeUrl" onUpdate={props.onUpdate}>Url</Textinput>
+          <Textinput statekey="relativeUrl" onUpdate={props.onUpdate}>Url</Textinput>
         )
     } else {
-        return (<UrlOptions onUpdate={props.onUpdate} value={props.value} type={props.requestType}/>)
+        return (
+          <UrlOptions onUpdate={props.onUpdate} value={props.value} type={props.requestType}/>
+        )
     }
 }
 function CheckCustom(props) {
     return (
-      <div className="form-inline">
-        <div className="form-group">
-          <label>Enter custom url:    </label>
-          <input className="form-control" type="checkbox" onChange={event => {
-              if (event.target.checked == false)
-              props.onUpdate("relativeUrl", "/contacts");
-              props.onUpdate("customUrl", event.target.checked);
-            }}/>
-        </div>
-      </div>
+      <FormElement label="Url Is Custom?">
+        <Switch defaultValue={false} onChange={(elem, val) => props.onUpdate("customUrl", val)}/>
+      </FormElement>
     )
 }
 class JsonTextarea extends React.Component {
@@ -95,16 +108,14 @@ class JsonTextarea extends React.Component {
             var parsed = JSON.parse(string);
             this.props.onUpdate("rawBody", parsed);
         } catch (err) {
-            console.log(err);
         }
     }
     render() {
         if (this.props.show) {
             return (
-              <div className="form-group">
-                <label>{this.props.children}:</label>
+              <FormElement label={this.props.children}>
                 <textarea className="form-control" onBlur={event => this.updateParentState(event.target.value)}></textarea>
-              </div>
+              </FormElement>
             )
         } else {
             return null
@@ -154,12 +165,9 @@ class QueryParams extends React.Component {
 
 function Textinput(props) {
     return (
-
-      <div className="form-group">
-        <label>{props.children}:</label>
+      <FormElement label={props.children}>
         <input className="form-control" value={props.value} type="text" onBlur={props.blurFunc} onChange={event => props.onUpdate(props.statekey, event.target.value)}/>
-      </div>
-
+      </FormElement>
     )
 }
 Hive.propTypes = {};
@@ -204,19 +212,17 @@ function UrlOptions(props) {
         "PUT": ['Only custom Urls']
     };
     return (
-      <div className="form-group">
-        <label>Url:</label>
+      <FormElement label="Url">
         <Select statekey="relativeUrl" items={typeObject[props.type]} value={props.value} onUpdate={props.onUpdate}/>
-      </div>
+      </FormElement>
     );
 
 }
 function RequestTypes(props) {
     const types = ['GET', 'POST', 'PUT'];
     return (
-        <div className="form-group">
-            <label>Request Type:</label>
-            <Select statekey="requestType" onUpdate={props.onUpdate} value={props.value} items={types}></Select>
-        </div>
+      <FormElement label="Request Type">
+        <Select statekey="requestType" onUpdate={props.onUpdate} value={props.value} items={types}></Select>
+      </FormElement>
     );
 }
