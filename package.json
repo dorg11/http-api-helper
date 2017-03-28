@@ -7,6 +7,7 @@
     "babel-core": "^6.20.0",
     "body-parser": "^1.16.0",
     "express": "^4.14.0",
+    "react-bootstrap-switch": "^15.0.4",
     "request": "^2.79.0"
   },
   "devDependencies": {
@@ -21,11 +22,11 @@
   "scripts": {
     "test": "node server",
     "start": "node server.js",
-    "build" : "webpack --optimize-minimize",
-    "clean" : "rimraf dist",
-    "push:heroku" : "npm build && git push heroku master",
-    "push:github" : "npm build && git push origin master",
-    "push" : "npm build && git push origin master && git push heroku master"
+    "build": "webpack --optimize-minimize",
+    "clean": "rimraf dist",
+    "push:heroku": "npm build && git push heroku master",
+    "push:github": "npm build && git push origin master",
+    "push": "npm build && git push origin master && git push heroku master"
   },
   "repository": {
     "type": "git",
