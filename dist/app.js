@@ -21564,7 +21564,6 @@
 
 	            event.preventDefault();
 	            if (this.state.requestType == 'GET') this.state.rawBody = '';
-	            console.log(this.state);
 	            fetch('/hivePost', {
 	                method: 'POST',
 	                headers: {
