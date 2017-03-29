@@ -25,11 +25,11 @@
   "scripts": {
     "prod": "cross-env NODE_ENV=production webpack-dev-server --env.prod=true",
     "build": "cross-env NODE_ENV=production webpack --env.prod=true",
-    "test": "webpack-dev-server",
+    "test": "webpack-dev-server --output-public-path=/dist/ --hot --inline",
     "start": "node server.js",
     "clean": "rimraf dist",
-    "push:heroku": "npm run clean && npm run build && git push heroku master && npm run clean && webpack",
-    "push:github": "npm run clean && npm run build && git push origin master && npm run clean && webpack",
+    "push:heroku": "git push heroku master",
+    "push:github": "npm run clean && git push origin master",
     "push": "npm run clean && npm build && git push origin master && git push heroku master && npm run clean && webpack"
   },
   "repository": {

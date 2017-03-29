@@ -116,9 +116,7 @@ module.exports = function (env) {
       contentBase: __dirname,
       historyApiFallback: true,
       port: 8080,
-      compress: isProd,
-      inline: !isProd,
-      hot: !isProd,
+      compress: true,
       stats: {
         assets: true,
         children: false,
