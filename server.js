@@ -8,10 +8,10 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use('/', express.static('.'));
 
 app.post('/hivePost', function(req, res) {
-  var a = new hiveReq(req.body);
-  a.run(res);
+  var requestObj = new hiveReq(req.body);
+  requestObj.run(res);
 })
 
-var port = process.env.PORT || 8080;
+var port = process.env.PORT;
 
 app.listen(port);

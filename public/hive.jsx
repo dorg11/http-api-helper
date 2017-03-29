@@ -9,10 +9,11 @@ class Hive extends React.Component {
             requestType: "GET",
             relativeUrl: "/contacts",
             inputCheck: {},
-            result: {}
+            result: {},
         }
         this.updateState = this.updateState.bind(this);
         this.sendRequest = this.sendRequest.bind(this);
+        this.checkInputLength = this.checkInputLength.bind(this);
     }
     updateState(key, data) {
         this.setState({[key]: data});
@@ -29,6 +30,9 @@ class Hive extends React.Component {
         }).then(response => {
             return response.text().then(text => this.setState({result: JSON.parse(text)}))
         });
+    }
+    checkInputLength(event) {
+      console.log(event.target);
     }
     render() {
         return (
@@ -54,7 +58,7 @@ class Hive extends React.Component {
 function SubmitButton(props) {
   return (
     <FormElement>
-      <input className="form-control" type="submit" value="Send"/>
+      <input className="form-control btn-success" type="submit" value="Send"/>
     </FormElement>
   )
 }
@@ -71,8 +75,9 @@ function ShowResult(props) {
   )
 }
 function FormElement(props) {
+  let classes = "form-group" + (props.validationError ? " has-error" : "");
   return (
-    <div className="form-group">
+    <div className={classes}>
         <label className="col-xs-2 control-label">{props.label}</label>
         <div className="col-xs-10">
           {props.children}
@@ -108,6 +113,7 @@ class JsonTextarea extends React.Component {
             var parsed = JSON.parse(string);
             this.props.onUpdate("rawBody", parsed);
         } catch (err) {
+
         }
     }
     render() {
@@ -165,7 +171,7 @@ class QueryParams extends React.Component {
 
 function Textinput(props) {
     return (
-      <FormElement label={props.children}>
+      <FormElement validationError={props.validationError} label={props.children}>
         <input className="form-control" value={props.value} type="text" onBlur={props.blurFunc} onChange={event => props.onUpdate(props.statekey, event.target.value)}/>
       </FormElement>
     )
