@@ -1,4 +1,7 @@
+var webpack = require('webpack');
+
 module.exports = {
+    devtool: 'source-map',
     context: __dirname + "/public",
     resolve: {
         extensions: ['', '.js', '.jsx', '.json']
@@ -13,6 +16,14 @@ module.exports = {
             loaders: ['style', 'css']
         }]
     },
+    plugins: [
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+        compressor: {
+          warnings: false
+        }
+      })
+    ],
     entry: "./index.jsx",
 
     output: {

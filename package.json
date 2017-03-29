@@ -22,7 +22,7 @@
   "scripts": {
     "test": "node server",
     "start": "node server.js",
-    "build": "webpack --optimize-minimize",
+    "build": "webpack",
     "clean": "rimraf dist",
     "push:heroku": "npm build && git push heroku master",
     "push:github": "npm build && git push origin master",
