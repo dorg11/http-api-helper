@@ -23,11 +23,12 @@
   },
   "scripts": {
     "test": "node server",
-    "start": "webpack-dev-server",
-    "build": "webpack",
+    "start": "node server.js",
+    "webpack-server" : "webpack-dev-server",
+    "build": "webpack --env.prod=true",
     "clean": "rimraf dist",
-    "push:heroku": "npm build && git push heroku master",
-    "push:github": "npm build && git push origin master",
+    "push:heroku": "npm run build && git push heroku master",
+    "push:github": "npm run build && git push origin master",
     "push": "npm build && git push origin master && git push heroku master"
   },
   "repository": {
